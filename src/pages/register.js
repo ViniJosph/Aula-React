@@ -1,16 +1,17 @@
 import React from 'react';
 import Layout from '../components/shared/Layouts';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useNavigate } from 'react-router-dom';
+
+import { useMutation } from '@apollo/client'
 
 import { UserContext } from '../auth';
 import { ADD_USER } from '../graphql/login/mutation';
 
 export default function RegisterPage() {
-    const [name, setName] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [name, setName] = React.useState("");
     const { setCurrentUser } = React.useContext(UserContext);
     const [addLogin] = useMutation(ADD_USER);
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function RegisterPage() {
             .then((ret) => {
                 let { id, name, username } = ret.data.insert_user.returning[0];
                 setCurrentUser({ id, name, username });
-                    navigate('/');
+                navigate('/');
             })
     }
 
@@ -40,7 +41,7 @@ export default function RegisterPage() {
                         <button className='btn btn-primary w-100' onClick={handleLogin}>Registrar</button>
                         <hr className='my-5' />
                         <div className='text-center'>
-                            <p>Já tem uma conta? <Link to="/login">Logue</Link></p>
+                            <p>Você já tem uma conta? <Link to="/login">Faça o Login</Link></p>
                         </div>
                     </div>
                     <div className='my-2 mx-auto mx-lg-0' style={{ maxWidth: '430px', minWidth: '430px' }} >

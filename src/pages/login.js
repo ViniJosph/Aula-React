@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '../components/shared/Layouts';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useLazyQuery } from '@apollo/client'
 
@@ -9,8 +9,8 @@ import { UserContext } from '../auth';
 import { GET_LOGIN } from '../graphql/login/query';
 
 export default function LoginPage() {
-    const [username, setUsername] = React.useState("thyagoquintas");
-    const [password, setPassword] = React.useState("123456");
+    const [username, setUsername] = React.useState("Josph");
+    const [password, setPassword] = React.useState("oi1234");
     const { setCurrentUser } = React.useContext(UserContext);
     const [loadLogin] = useLazyQuery(GET_LOGIN);
     const navigate = useNavigate();
@@ -20,7 +20,6 @@ export default function LoginPage() {
         loadLogin({ variables: { username } })
             .then((lazy) => {
                 const user = lazy.data.user[0];
-                console.log(password);
                 if (user.password == btoa(password)) {
                     const { id, name, username } = user;
                     setCurrentUser({ id, name, username });

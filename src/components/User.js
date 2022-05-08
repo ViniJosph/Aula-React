@@ -1,19 +1,19 @@
 import React from 'react';
 
-import { ADD_POST } from '../../graphql/post/mutation';
+import { EDIT_USER } from '../graphql/user/mutation';
 import { useMutation } from '@apollo/client';
-import { UserContext } from '../../auth';
+import { UserContext } from '../auth';
 
-export default function NewPost({isNewPost}){
+export default function EditUser({isEditUser}){
     const [text, setText] = React.useState("");
     const { currentUser } = React.useContext(UserContext);
-    const [addPost] = useMutation(ADD_POST);
+    const [editUser] = useMutation(EDIT_USER);
 
     const image = React.useRef();
 
-    if(isNewPost){
-        if(!document.getElementById('newPost').classList.contains('show'))
-            new window.bootstrap.Modal(document.getElementById('newPost')).show();
+    if(isEditUser){
+        if(!document.getElementById('editUser').classList.contains('show'))
+            new window.bootstrap.Modal(document.getElementById('editUser')).show();
     }
 
     async function uploadImage(imagem){
@@ -30,34 +30,35 @@ export default function NewPost({isNewPost}){
         return bodyJson.url;
     }
 
-
-
-    async function handleNewPost(){
+    async function handleEditUser(){
         let url = await uploadImage(image.current.files[0])
         
-        const newPost = {
-            text: text,
+        const newUser = {
+            name: text,
             image: url,
             userId: currentUser.id,
         }
 
-        addPost({ variables : {
-                image: newPost.image,
-                text: newPost.text,
-                userId: newPost.userId
+        editUser({ variables : {
+                image: newUser.image,
+                name: newUser.name,
+                userId: newUser.userId
             }
         });
 
-        console.log(newPost);
+        console.log(editUser);
     }
 
 
+
+
+
     return (
-        <div className="modal" id="newPost" tabIndex="-1">
+        <div className="modal" id="editUser" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Criar um Post</h5>
+                        <h5 className="modal-title">Edite seu usuario</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
@@ -66,9 +67,10 @@ export default function NewPost({isNewPost}){
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary" onClick={handleNewPost}>Postar</button>
+                        <button type="button" className="btn btn-primary" onClick={handleEditUser}>Editar</button>
                     </div>
                 </div>
             </div>
-        </div>);
+        </div>
+    );
 }
